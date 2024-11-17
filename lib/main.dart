@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'question_bank.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +32,21 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+
+  Question_Bank qb = Question_Bank();
+
+  void resetQuiz() {
+    setState(() {
+      qb.resetQuiz(); // Reset the question bank
+    });
+  }
+
+  void checkAnswer(bool A) {
+    setState(() {
+      qb.checkAnswer(A, context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -41,7 +59,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                qb.getQuestion(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -67,7 +85,9 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                // The user picked true.
+                setState(() {
+                  qb.checkAnswer(true,context);
+                });
               },
             ),
           ),
@@ -88,13 +108,20 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                // The user picked false.
+                setState(() {
+                  qb.checkAnswer(false,context);
+                });
               },
             ),
           ),
         ),
-        // TODO: Add a Row here as your score keeper
+        Row(
+          children: qb.scorekeeper,
+        ),
       ],
     );
   }
+
 }
+
+
